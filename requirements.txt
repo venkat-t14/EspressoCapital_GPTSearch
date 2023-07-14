@@ -1,0 +1,6 @@
+pandas
+numpy
+fastapi
+sseclient-py
+urllib3
+tiktoken

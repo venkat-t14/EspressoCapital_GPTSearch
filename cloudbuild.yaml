@@ -1,0 +1,29 @@
+steps:
+  - name: gcr.io/kaniko-project/executor:v0.16.0
+    args:
+      [
+        "--dockerfile=Dockerfile",
+        "--context=/workspace",
+        "--destination=gcr.io/$PROJECT_ID/notebooks/${_SERVICE_NAME}",
+        "--cache=true",
+        "--cache-ttl=720h",
+      ]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "${_SERVICE_NAME}",
+        "--image",
+        "gcr.io/$PROJECT_ID/notebooks/${_SERVICE_NAME}:latest",
+        "--region",
+        "${_REGION}",
+        "--platform",
+        "managed",
+        "--tag",
+        "jupyter",
+        "--allow-unauthenticated",
+      ]
+substitutions:
+  _REGION: us-central1
